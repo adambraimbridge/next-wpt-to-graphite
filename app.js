@@ -2,7 +2,6 @@ var WebPageTest = require('webpagetest');
 var http = require('http');
 var fs = require('fs');
 var net = require('net');
-
 var wpt = new WebPageTest();
 var test_ID;
 var test_status;
@@ -38,10 +37,10 @@ browser = location.substring(location.lastIndexOf(':')+1,location.length);
 console.log("Country: " + country);
 console.log("Browser: " + browser);
 
-// Star the test. Once started, initiate the check-for-results-loop
+// Start the test. Once started, initiate the check-for-results-loop
 wpt.runTest(url, {
 		"server":wpt_server,
-		"location":location,
+		"location":location
 	}, 	function (err, data) {
 			test_ID = data.data.testId;
 			console.log(getStatus(test_ID));
@@ -56,6 +55,9 @@ function getStatus(id){
 		"server":wpt_server
 	}, function(err, status_data){
 
+		if(err){
+			exit();
+		}
 		test_status = status_data.statusCode;
 		console.log("Status: " + test_status);
 
@@ -78,27 +80,37 @@ function postData(id){
 		"server":wpt_server
 	}, function(err, results){
 
-		var postPayload =
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.bytesIn ' + 	results.data.runs['1'].firstView.bytesIn + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + 	results.data.runs['1'].firstView.docTime + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + 	results.data.runs['1'].firstView.fullyLoaded + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + 	results.data.runs['1'].firstView.render + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.visualComplete ' + 	results.data.runs['1'].firstView.visualComplete + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + 	results.data.runs['1'].repeatView.bytesIn + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + 	results.data.runs['1'].repeatView.docTime + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + 	results.data.runs['1'].repeatView.fullyLoaded + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + 	results.data.runs['1'].repeatView.render + '\n' +
-			apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.visualComplete ' + 	results.data.runs['1'].repeatView.visualComplete;
+		var socket = net.createConnection(2003, "carbon.hostedgraphite.com", function(err) {
 
-		console.log('Payload: \n' + postPayload);
+			if(results.data.runs['1'].firstView != null) {
 
+				var postPayload =
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.bytesIn ' + results.data.runs['1'].firstView.bytesIn + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + results.data.runs['1'].firstView.docTime + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + results.data.runs['1'].firstView.fullyLoaded + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + results.data.runs['1'].firstView.render + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.visualComplete ' + results.data.runs['1'].firstView.visualComplete + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + results.data.runs['1'].repeatView.bytesIn + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + results.data.runs['1'].repeatView.docTime + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + results.data.runs['1'].repeatView.fullyLoaded + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render + '\n' +
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.visualComplete ' + results.data.runs['1'].repeatView.visualComplete;
 
-var socket = net.createConnection(2003, "carbon.hostedgraphite.com", function(err) {
-			console.log("Connected to graphite");
-			socket.write(postPayload);
-			socket.end();
+				console.log('Payload: \n' + postPayload);
+
+				console.log("Connected to graphite");
+				socket.write(postPayload);
+				socket.end();
+			}else{
+				exit();
+			}
 		});
 
 	});
 
+}
+
+function exit(){
+	console.log("Failed to get data back from WebPageTest.  Dropping this result set");
+	process.exit(code=0)
 }
