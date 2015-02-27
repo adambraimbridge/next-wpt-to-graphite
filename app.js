@@ -12,6 +12,7 @@ var pageType = process.argv[3];
 var url;
 var browser;
 var country;
+var domain = require('domain');
 
 // Set url based on command line parameters (defaults to article page)
 if(pageType == 'article'){
@@ -51,26 +52,39 @@ wpt.runTest(url, {
 // Keep checking that the test has finished.  Once it has, post the metrics
 function getStatus(id){
 
-	wpt.getTestStatus(id, {
-		"server":wpt_server
-	}, function(err, status_data){
+	console.log('checking for test completion', id);
 
-		if(err){
-			exit();
-		}
-		test_status = status_data.statusCode;
-		console.log("Status: " + test_status);
+	var d = domain.create();
+	
+	d.on('error', function(err) {
+		console.log('Something went wrong when fetching the test status', err);
+	})
 
-		if(test_status==200){
-			postData(id);
-		}else{
-			setTimeout(function(){
-				getStatus(id);
-			}, 5000);
-		}
+	d.run(function() {
+
+		wpt.getTestStatus(id, {
+			"server": wpt_server
+		}, function(err, status_data){
+
+			if(err){
+				exit();
+			}
+
+			test_status = status_data.statusCode;
+			
+			console.log("Status: " + test_status);
+
+			if(test_status==200){
+				postData(id);
+			}else{
+				setTimeout(function(){
+					getStatus(id);
+				}, 5000);
+			}
+
+		});
 
 	});
-
 }
 
 // Post metrics to HostedGraphite
