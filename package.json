@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "webpagetest": "0.3.x"
+    "webpagetest": "0.3.x",
+    "minimist": "^1.1.0"
   },
   "repository": {
     "type": "git",
