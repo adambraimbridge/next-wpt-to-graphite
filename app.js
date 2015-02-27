@@ -9,8 +9,8 @@ var test_ID;
 var test_status;
 var apiKey = process.env.HOSTEDGRAPHITE_APIKEY;
 var wpt_server = process.env.WPT_LOCATION;
-var location = argv.l
-var pageType = argv.p
+var location = argv.l;
+var pageType = argv.p;
 var url;
 var browser;
 var country;
@@ -83,23 +83,32 @@ function postData(id){
 	}, function(err, results){
 
 		var socket = net.createConnection(2003, "carbon.hostedgraphite.com", function(err) {
-
+			if(err){
+				exit();
+			}
 			if(results.data.runs['1'].firstView != null) {
 
-				var postPayload =
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.bytesIn ' + results.data.runs['1'].firstView.bytesIn + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + results.data.runs['1'].firstView.docTime + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + results.data.runs['1'].firstView.fullyLoaded + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + results.data.runs['1'].firstView.render + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + results.data.runs['1'].repeatView.bytesIn + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + results.data.runs['1'].repeatView.docTime + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + results.data.runs['1'].repeatView.fullyLoaded + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render;
 
-				console.log('Payload: \n' + postPayload);
-
-				console.log("Connected to graphite");
-				socket.write(postPayload);
+                jsonToWPT(results.data);
+				// for(var level1Attrib in results.data){
+				// 	// if(p.hasOwnProperty(level1)){
+				// 		console.log(level1Attrib + " -> " + results.data[level1Attrib]);
+				// 	// }
+				// }
+				// var postPayload =
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.bytesIn ' + results.data.runs['1'].firstView.bytesIn + '\n' +
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + results.data.runs['1'].firstView.docTime + '\n' +
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + results.data.runs['1'].firstView.fullyLoaded + '\n' +
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + results.data.runs['1'].firstView.render + '\n' +
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + results.data.runs['1'].repeatView.bytesIn + '\n' +
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + results.data.runs['1'].repeatView.docTime + '\n' +
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + results.data.runs['1'].repeatView.fullyLoaded + '\n' +
+				// 	apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render;
+				//
+				// console.log('Payload: \n' + postPayload);
+				//
+				// console.log("Connected to graphite");
+				// socket.write(postPayload);
 				socket.end();
 			}else{
 				exit();
@@ -113,4 +122,35 @@ function postData(id){
 function exit(){
 	console.log("Failed to get data back from WebPageTest.  Dropping this result set");
 	process.exit(code=0)
+}
+
+function jsonToWPT(json){
+	for(item in json){
+
+        var key = item;
+        var value = json[item];
+        var wptValue = key;
+
+        console.log("------------");
+        console.log("Key: " + key);
+        console.log("Value: " + value);
+        console.log("Type: " + typeof value);
+		if(typeof value === 'object'){
+			console.log("This is an object");
+		}
+		else if(typeof value === 'array'){
+			console.log("This is an array");
+		}
+		else{
+			console.log("This is a value");
+            addToGraphiteResultSet(key,value);
+		}
+        console.log("-------------");
+	}
+}
+
+
+
+function addToGraphiteResultSet(key,value){
+    console.log("Adding: " + key + " -> " + value);
 }
