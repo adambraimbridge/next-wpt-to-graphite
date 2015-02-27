@@ -1,7 +1,7 @@
 A simple program to check in-browser performance, using WebPageTest, against the next.ft.com website and report the most important metrics to a Hosted Graphite instance.
 
 **Usage:**
->node app.js browser_location {pageType}
+>node app.js -l browser_location { -p pageType}
 
 **browser_location:** Where you want the browser to run.  Choices can be found at the WebPageTest instance's "locations" page: {host}/getLocations.php?f=xml.
 

@@ -2,13 +2,15 @@ var WebPageTest = require('webpagetest');
 var http = require('http');
 var fs = require('fs');
 var net = require('net');
+var argv = require('minimist')(process.argv.slice(2));
+
 var wpt = new WebPageTest();
 var test_ID;
 var test_status;
 var apiKey = process.env.HOSTEDGRAPHITE_APIKEY;
 var wpt_server = process.env.WPT_LOCATION;
-var location = process.argv[2];
-var pageType = process.argv[3];
+var location = argv.l
+var pageType = argv.p
 var url;
 var browser;
 var country;
@@ -97,7 +99,7 @@ function postData(id){
 				console.log('Payload: \n' + postPayload);
 
 				console.log("Connected to graphite");
-				socket.write(postPayload);
+				// socket.write(postPayload);
 				socket.end();
 			}else{
 				exit();
