@@ -87,19 +87,19 @@ function postData(id){
 			if(results.data.runs['1'].firstView != null) {
 
 				var postPayload =
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.bytesIn ' + results.data.runs['1'].firstView.bytesIn + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + results.data.runs['1'].firstView.docTime + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + results.data.runs['1'].firstView.fullyLoaded + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + results.data.runs['1'].firstView.render + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + results.data.runs['1'].repeatView.bytesIn + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + results.data.runs['1'].repeatView.docTime + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + results.data.runs['1'].repeatView.fullyLoaded + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render;
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.bytesIn ' + results.data.runs['1'].firstView.bytesIn + '\n' +
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + results.data.runs['1'].firstView.docTime + '\n' +
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + results.data.runs['1'].firstView.fullyLoaded + '\n' +
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + results.data.runs['1'].firstView.render + '\n' +
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + results.data.runs['1'].repeatView.bytesIn + '\n' +
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + results.data.runs['1'].repeatView.docTime + '\n' +
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + results.data.runs['1'].repeatView.fullyLoaded + '\n' +
+					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render;
 
 				console.log('Payload: \n' + postPayload);
 
 				console.log("Connected to graphite");
-				// socket.write(postPayload);
+				socket.write(postPayload);
 				socket.end();
 			}else{
 				exit();
