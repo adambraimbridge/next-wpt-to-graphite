@@ -33,7 +33,7 @@ if(typeof location == 'undefined'){
 
 // get Country and Browser metrics from the location
 country = location.substring(0,location.indexOf('_'));
-browser = location.substring(location.lastIndexOf(':')+1,location.length);
+browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","");
 console.log("Country: " + country);
 console.log("Browser: " + browser);
 
@@ -89,12 +89,10 @@ function postData(id){
 					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + results.data.runs['1'].firstView.docTime + '\n' +
 					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + results.data.runs['1'].firstView.fullyLoaded + '\n' +
 					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + results.data.runs['1'].firstView.render + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.visualComplete ' + results.data.runs['1'].firstView.visualComplete + '\n' +
 					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + results.data.runs['1'].repeatView.bytesIn + '\n' +
 					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + results.data.runs['1'].repeatView.docTime + '\n' +
 					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + results.data.runs['1'].repeatView.fullyLoaded + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render + '\n' +
-					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.visualComplete ' + results.data.runs['1'].repeatView.visualComplete;
+					apiKey + '.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render;
 
 				console.log('Payload: \n' + postPayload);
 
