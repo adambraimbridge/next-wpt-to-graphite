@@ -3,18 +3,21 @@ var http = require('http');
 var fs = require('fs');
 var net = require('net');
 var argv = require('minimist')(process.argv.slice(2));
+var domain = require('domain');
 
 var wpt = new WebPageTest();
 var test_ID;
 var test_status;
 var apiKey = process.env.HOSTEDGRAPHITE_APIKEY;
 var wpt_server = process.env.WPT_LOCATION;
-var location = argv.l
-var pageType = argv.p
+var location = argv.l;
+var pageType = argv.p;
 var url;
 var browser;
 var country;
-var domain = require('domain');
+var postPayload = "";
+var firstLine = true;
+
 
 // Set url based on command line parameters (defaults to article page)
 if(pageType == 'article'){
@@ -35,8 +38,8 @@ if(typeof location == 'undefined'){
 }
 
 // get Country and Browser metrics from the location
-country = location.substring(0,location.indexOf('_'));
-browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","");
+country = location.substring(0,location.indexOf('_')).toLowerCase();
+browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","").toLowerCase();
 console.log("Country: " + country);
 console.log("Browser: " + browser);
 
@@ -60,7 +63,7 @@ function getStatus(id){
 	
 	d.on('error', function(err) {
 		console.log('Something went wrong when fetching the test status', err);
-	})
+	});
 
 	d.run(function() {
 
@@ -73,7 +76,7 @@ function getStatus(id){
 			}
 
 			test_status = status_data.statusCode;
-			
+
 			console.log("Status: " + test_status);
 
 			if(test_status==200){
@@ -99,20 +102,7 @@ function postData(id){
 		var socket = net.createConnection(2003, "carbon.hostedgraphite.com", function(err) {
 
 			if(results.data.runs['1'].firstView != null) {
-
-				var postPayload =
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.bytesIn ' + results.data.runs['1'].firstView.bytesIn + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.docTime ' + results.data.runs['1'].firstView.docTime + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.fullyLoaded ' + results.data.runs['1'].firstView.fullyLoaded + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'firstView.render ' + results.data.runs['1'].firstView.render + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.bytesIn ' + results.data.runs['1'].repeatView.bytesIn + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.docTime ' + results.data.runs['1'].repeatView.docTime + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.fullyLoaded ' + results.data.runs['1'].repeatView.fullyLoaded + '\n' +
-					apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + '.' + 'repeatView.render ' + results.data.runs['1'].repeatView.render;
-
-				console.log('Payload: \n' + postPayload);
-
-				console.log("Connected to graphite");
+                jsonToWPT(0,"",results.data);
 				socket.write(postPayload);
 				socket.end();
 			}else{
@@ -127,4 +117,30 @@ function postData(id){
 function exit(){
 	console.log("Failed to get data back from WebPageTest.  Dropping this result set");
 	process.exit(code=0)
+}
+
+function jsonToWPT(level, name, json){
+    for(item in json){
+        this.name = name;
+        var key = item;
+        var value = json[item];
+
+        if(typeof value === 'object'){
+            jsonToWPT(level + 1, name + "." + key, value);
+        }
+        else{
+            addToGraphiteResultSet(level + 1, name + "." + key,value);
+        }
+    }
+}
+
+function addToGraphiteResultSet(level,name,value){
+    if(level <= 3) {
+        if(firstLine){
+            firstLine = false;
+        }else{
+            postPayload += "\n";
+        }
+        postPayload += apiKey + '.webpagetest.' + country + '.' + browser + '.' + pageType + name + " " + value;
+    }
 }
