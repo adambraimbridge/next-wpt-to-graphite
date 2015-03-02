@@ -38,8 +38,8 @@ if(typeof location == 'undefined'){
 }
 
 // get Country and Browser metrics from the location
-country = location.substring(0,location.indexOf('_'));
-browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","");
+country = location.substring(0,location.indexOf('_')).toLowerCase();
+browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","").toLowerCase();
 console.log("Country: " + country);
 console.log("Browser: " + browser);
 
@@ -141,6 +141,6 @@ function addToGraphiteResultSet(level,name,value){
         }else{
             postPayload += "\n";
         }
-        postPayload += apiKey + '.webpagetest.next.' + country + '.' + browser + '.' + pageType + name + " " + value;
+        postPayload += apiKey + '.webpagetest.' + country + '.' + browser + '.' + pageType + name + " " + value;
     }
 }
