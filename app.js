@@ -104,7 +104,7 @@ function postData(id){
 			if(results.data.runs['1'].firstView != null) {
                 jsonToWPT(0,"",results.data);
                 console.log(postPayload);
-				//socket.write(postPayload);
+				socket.write(postPayload);
 				socket.end();
 			}else{
 				exit();
