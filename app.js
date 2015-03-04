@@ -4,6 +4,7 @@ var fs = require('fs');
 var net = require('net');
 var argv = require('minimist')(process.argv.slice(2));
 var domain = require('domain');
+var url = require('url').parse(argv.u);
 var wpt = new WebPageTest();
 var test_ID;
 var test_status;
@@ -11,26 +12,16 @@ var apiKey = process.env.HOSTEDGRAPHITE_APIKEY;
 var wpt_server = process.env.WPT_LOCATION;
 var location = argv.l;
 var pageType = argv.p;
-var url = argv.u;
-var site = url;
+var hostname = url.hostname;
 var browser;
 var country;
 var postPayload = "";
 var firstLine = true;
 
-
 // Make sure location is provided
 if(typeof location == 'undefined' || typeof pageType == 'undefined' || typeof url == 'undefined'){
 	console.log('Missing required parameter.  Correct usage is "node app.js -l browser_location -u url -p pageType""');
 	return 'error';
-}
-
-// Figure out the hostname for the graphite metric
-if(url.indexOf("//") != -1){
-    site = url.substring(url.indexOf("//")+2);
-}
-if(site.indexOf("/") != -1){
-    site = site.substring(0,site.indexOf("/"));
 }
 
 // get Country and Browser metrics from the location
@@ -39,8 +30,7 @@ browser = location.substring(location.lastIndexOf(':')+1,location.length).replac
 console.log("Country: " + country);
 console.log("Browser: " + browser);
 console.log("URL: " + url);
-console.log("Site: " + site);
-
+console.log("Hostname: " + hostname);
 
 
 // Start the test. Once started, initiate the check-for-results-loop
@@ -103,7 +93,6 @@ function postData(id){
 
 			if(results.data.runs['1'].firstView != null) {
                 jsonToWPT(0,"",results.data);
-                console.log(postPayload);
 				socket.write(postPayload);
 				socket.end();
 			}else{
@@ -142,6 +131,6 @@ function addToGraphiteResultSet(level,name,value){
         }else{
             postPayload += "\n";
         }
-        postPayload += apiKey + '.webpagetest.' + site + "." + country + "." + browser + "." + pageType + name + " " + value;
+        postPayload += apiKey + '.webpagetest.' + hostname + "." + country + "." + browser + "." + pageType + name + " " + value;
     }
 }
