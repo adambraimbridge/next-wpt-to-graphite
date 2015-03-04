@@ -4,7 +4,7 @@ var fs = require('fs');
 var net = require('net');
 var argv = require('minimist')(process.argv.slice(2));
 var domain = require('domain');
-
+var url = require('url').parse(argv.u);
 var wpt = new WebPageTest();
 var test_ID;
 var test_status;
@@ -12,28 +12,15 @@ var apiKey = process.env.HOSTEDGRAPHITE_APIKEY;
 var wpt_server = process.env.WPT_LOCATION;
 var location = argv.l;
 var pageType = argv.p;
-var url;
+var hostname = url.hostname;
 var browser;
 var country;
 var postPayload = "";
 var firstLine = true;
 
-
-// Set url based on command line parameters (defaults to article page)
-if(pageType == 'article'){
-	url = 'next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de';
-}else if(pageType == 'homepage'){
-	url = 'next.ft.com'
-}else if(typeof pageType == 'undefined'){
-	url = 'next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de';
-	pageType = 'article';
-}
-console.log("URL: " + url);
-console.log("PageType: " + pageType);
-
-// Set a base location if one isn't provided
-if(typeof location == 'undefined'){
-	console.log('Missing required browser location parameter.  Correct usage is "node app.js browser_location {pageType}""');
+// Make sure location is provided
+if(typeof location == 'undefined' || typeof pageType == 'undefined' || typeof url == 'undefined'){
+	console.log('Missing required parameter.  Correct usage is "node app.js -l browser_location -u url -p pageType""');
 	return 'error';
 }
 
@@ -42,6 +29,9 @@ country = location.substring(0,location.indexOf('_')).toLowerCase();
 browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","").toLowerCase();
 console.log("Country: " + country);
 console.log("Browser: " + browser);
+console.log("URL: " + url);
+console.log("Hostname: " + hostname);
+
 
 // Start the test. Once started, initiate the check-for-results-loop
 wpt.runTest(url, {
@@ -60,7 +50,7 @@ function getStatus(id){
 	console.log('checking for test completion', id);
 
 	var d = domain.create();
-	
+
 	d.on('error', function(err) {
 		console.log('Something went wrong when fetching the test status', err);
 	});
@@ -141,6 +131,6 @@ function addToGraphiteResultSet(level,name,value){
         }else{
             postPayload += "\n";
         }
-        postPayload += apiKey + '.webpagetest.' + country + '.' + browser + '.' + pageType + name + " " + value;
+        postPayload += apiKey + '.webpagetest.' + hostname + "." + country + "." + browser + "." + pageType + name + " " + value;
     }
 }
