@@ -9,9 +9,10 @@ A simple program to check in-browser performance, using WebPageTest, against the
 
 **pageType:** What kind of page is being tested.  This helps keep metrics separated in Graphite.  For example, if you enter `article` for a pageType, then the assocated metric in Graphite will be something like `webpagetest.next.ft.com.europe.chrome.article.firstrun...`
 
-**server:** Which WebPageTest server you want to use.  If it's 
-Make sure you have the following environment variables defined:
- - WPT_LOCATION <- the hostname of your WebPageTest server
- - HOSTEDGRAPHITE_APIKEY <- your Graphite API key
+**server:** Which WebPageTest server you want to use.  If it's the public www.webpagetest.org, you'll need to set your API key as an environment variable.
 
+Make sure you have the following environment variables defined:
+ - HOSTEDGRAPHITE_APIKEY <- your Graphite API key
+ - WPT_APIKEY <- your WPT Key (if using the public servers)
+ 
 Results are sent to a hosted graphite page https://www.hostedgraphite.com/app/
