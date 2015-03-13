@@ -8,8 +8,9 @@ var url = require('url').parse(argv.u);
 var wpt = new WebPageTest();
 var test_ID;
 var test_status;
-var apiKey = process.env.HOSTEDGRAPHITE_APIKEY;
-var wpt_server = process.env.WPT_LOCATION;
+var GraphiteAPIKey = process.env.HOSTEDGRAPHITE_APIKEY;
+var wptAPIKey = process.env.WPT_APIKEY;
+var wpt_server = argv.s;
 var location = argv.l;
 var pageType = argv.p;
 var hostname = url.hostname;
@@ -20,24 +21,33 @@ var firstLine = true;
 
 // Make sure location is provided
 if(typeof location == 'undefined' || typeof pageType == 'undefined' || typeof url == 'undefined'){
-	console.log('Missing required parameter.  Correct usage is "node app.js -l browser_location -u url -p pageType""');
+	console.log('Missing required parameter.  Correct usage is "node app.js -l browser_location -u url -p pageType -s server""');
 	return 'error';
 }
 
 // get Country and Browser metrics from the location
 country = location.substring(0,location.indexOf('_')).toLowerCase();
+if(country == "")country = location.substring(0,location.indexOf(':')).toLowerCase();
 browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","").toLowerCase();
 console.log("Country: " + country);
 console.log("Browser: " + browser);
 console.log("URL: " + url);
 console.log("Hostname: " + hostname);
+console.log("Location: " + location);
+console.log("Server: " + wpt_server);
 
+var opts = {
+    "server":wpt_server,
+    "location": location
+}
+
+if (!/internal/.test(wpt_server)) {
+    opts.key = wptAPIKey;
+}
 
 // Start the test. Once started, initiate the check-for-results-loop
-wpt.runTest(url, {
-		"server":wpt_server,
-		"location":location
-	}, 	function (err, data) {
+wpt.runTest(url, opts, 	function (err, data) {
+        console.log(data);
 			test_ID = data.data.testId;
 			console.log(getStatus(test_ID));
 	}
@@ -131,6 +141,6 @@ function addToGraphiteResultSet(level,name,value){
         }else{
             postPayload += "\n";
         }
-        postPayload += apiKey + '.webpagetest.' + hostname + "." + country + "." + browser + "." + pageType + name + " " + value;
+        postPayload += GraphiteAPIKey + '.webpagetest.' + hostname + "." + country + "." + browser + "." + pageType + name + " " + value;
     }
 }
