@@ -1,7 +1,7 @@
 A simple program to check in-browser performance, using WebPageTest, against the next.ft.com website and report the most important metrics to a Hosted Graphite instance.
 
 **Usage:**
->node app.js -l browser_location -u url_to_test -p pageType -s server
+>node app.js -l browser_location -u url_to_test -p pageType -s server [-r num_runs]
 
 **browser_location:** Where you want the browser to run.  Choices can be found at the WebPageTest instance's "locations" page: {host}/getLocations.php?f=xml.
 
@@ -10,6 +10,8 @@ A simple program to check in-browser performance, using WebPageTest, against the
 **pageType:** What kind of page is being tested.  This helps keep metrics separated in Graphite.  For example, if you enter `article` for a pageType, then the assocated metric in Graphite will be something like `webpagetest.next.ft.com.europe.chrome.article.firstrun...`
 
 **server:** Which WebPageTest server you want to use.  If it's the public www.webpagetest.org, you'll need to set your API key as an environment variable.
+
+**num_runs (optional):** How many runs do you want to make of the test.  Adding more runs improves the average calculation and makes the standardDeviation metrics a lot more useful, but it means the tests will take more time.  This defaults to '1' if no paramter is passed.
 
 Make sure you have the following environment variables defined:
  - HOSTEDGRAPHITE_APIKEY <- your Graphite API key
