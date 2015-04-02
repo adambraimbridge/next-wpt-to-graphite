@@ -13,6 +13,7 @@ var wptAPIKey = process.env.WPT_APIKEY;
 var wpt_server = argv.s;
 var location = argv.l;
 var pageType = argv.p;
+var numRuns = argv.r;
 var hostname = url.hostname;
 var browser;
 var country;
@@ -38,8 +39,9 @@ console.log("Server: " + wpt_server);
 
 var opts = {
     "server":wpt_server,
-    "location": location
-}
+    "location": location,
+    "runs": numRuns || 1
+};
 
 if (!/internal/.test(wpt_server)) {
     opts.key = wptAPIKey;
