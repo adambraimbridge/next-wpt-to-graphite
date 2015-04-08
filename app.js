@@ -13,6 +13,7 @@ var wpt_server = process.env.WPT_LOCATION;
 var location = argv.l;
 var pageType = argv.p;
 var hostname = url.hostname;
+var href = url.href;
 var browser;
 var country;
 var postPayload = "";
@@ -27,14 +28,14 @@ if(typeof location == 'undefined' || typeof pageType == 'undefined' || typeof ur
 // get Country and Browser metrics from the location
 country = location.substring(0,location.indexOf('_')).toLowerCase();
 browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","").toLowerCase();
-console.log("Country: " + country);
-console.log("Browser: " + browser);
-console.log("URL: " + url);
+console.log("Country : " + country);
+console.log("Browser : " + browser);
+console.log("Href    : " + href);
 console.log("Hostname: " + hostname);
 
 
 // Start the test. Once started, initiate the check-for-results-loop
-wpt.runTest(url, {
+wpt.runTest(href, {
 		"server":wpt_server,
 		"location":location
 	}, 	function (err, data) {
