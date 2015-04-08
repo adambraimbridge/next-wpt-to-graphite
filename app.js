@@ -15,6 +15,7 @@ var location = argv.l;
 var pageType = argv.p;
 var numRuns = argv.r;
 var hostname = url.hostname;
+var href = url.href;
 var browser;
 var country;
 var postPayload = "";
@@ -30,12 +31,12 @@ if(typeof location == 'undefined' || typeof pageType == 'undefined' || typeof ur
 country = location.substring(0,location.indexOf('_')).toLowerCase();
 if(country == "")country = location.substring(0,location.indexOf(':')).toLowerCase();
 browser = location.substring(location.lastIndexOf(':')+1,location.length).replace(" ","").toLowerCase();
-console.log("Country: " + country);
-console.log("Browser: " + browser);
-console.log("URL: " + url);
+console.log("Country : " + country);
+console.log("Browser : " + browser);
+console.log("Href    : " + href);
 console.log("Hostname: " + hostname);
 console.log("Location: " + location);
-console.log("Server: " + wpt_server);
+console.log("Server  : " + wpt_server);
 
 var opts = {
     "server":wpt_server,
@@ -48,7 +49,7 @@ if (!/internal/.test(wpt_server)) {
 }
 
 // Start the test. Once started, initiate the check-for-results-loop
-wpt.runTest(url, opts, 	function (err, data) {
+wpt.runTest(href, opts, 	function (err, data) {
         console.log(data);
 			test_ID = data.data.testId;
 			console.log(getStatus(test_ID));
