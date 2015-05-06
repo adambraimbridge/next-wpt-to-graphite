@@ -11,6 +11,8 @@ function RunTests(options, key) {
 RunTests.prototype.run = function(callback) {
 	this.wpt = new WebPageTest(this.options.server, this.key);
 
+	this.runStartTime = new Date;
+
 	async.waterfall([
 		this.start.bind(this),
 		this.poll.bind(this),
@@ -19,14 +21,18 @@ RunTests.prototype.run = function(callback) {
 };
 
 RunTests.prototype.start = function(callback) {
+	this.log('Test started at ' + this.runStartTime.toTimeString());
+
 	this.wpt.runTest(this.options.url, this.options, function(error, response) {
 		callback(error, response.data.testId);
 	});
+
 };
 
 RunTests.prototype.poll = function(testId, callback) {
 	this.wpt.getTestStatus(testId, this.options, function(error, response) {
-		var statusCode = response.data.statusCode;
+		var statusCode = !error && response.data.statusCode;
+		var timeTaken = Date.now() - this.runStartTime.getTime();
 
 		if (error || statusCode >= 400) {
 			return callback(error || new Error(response.data.statusText));
@@ -36,18 +42,33 @@ RunTests.prototype.poll = function(testId, callback) {
 			return callback(null, testId);
 		}
 
+		if (timeTaken >= this.options.timeout) {
+			return this.cancel(testId, function() {
+				callback(new Error('Operation timed out.'));
+			});
+		}
+
+		this.log('Polling test #' + testId);
+
 		setTimeout(this.poll.bind(this), this.options.wait, testId, callback);
+
 	}.bind(this));
+};
+
+RunTests.prototype.end = function(testId, callback) {
+	this.log('Test completed at ' + new Date().toTimeString());
+
+	this.wpt.getTestResults(testId, this.options, function(error, response) {
+		callback(error, response.data);
+	});
 };
 
 RunTests.prototype.cancel = function(testId, callback) {
 	this.wpt.cancelTest(testId, this.options, callback);
 };
 
-RunTests.prototype.end = function(testId, callback) {
-	this.wpt.getTestResults(testId, this.options, function(error, response) {
-		callback(error, response.data);
-	});
+RunTests.prototype.log = function(message) {
+	this.options.verbose && console.log(message);
 };
 
 module.exports = RunTests;

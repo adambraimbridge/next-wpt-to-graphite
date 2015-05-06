@@ -9,8 +9,10 @@ var wptOptions = {
 	url: argv.u,
 	runs: argv.r || 1,
 	wait: argv.w || 1000 * 5,
+	timeout: argv.t || 180,
 	server: argv.s || 'http://www.webpagetest.org',
-	location: argv.l || 'Dulles:Chrome'
+	location: argv.l || 'Dulles:Chrome',
+	verbose: argv.v || true
 };
 
 var logOptions = {
