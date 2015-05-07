@@ -1,10 +1,10 @@
 var url = require('url');
 var net = require('net');
 
-const port = 2003;
-const href = 'carbon.hostedgraphite.com';
+const GRAPHITE_PORT = 2003;
+const GRAPHITE_URL = 'carbon.hostedgraphite.com';
 
-const properties = [
+const COLLECT_PROPERTIES = [
 	'TTFB',
 	'render',
 	'domContentLoadedEventStart',
@@ -25,7 +25,7 @@ function LogTests(options, key) {
 LogTests.prototype.fulfilled = function(data) {
 	var report = this.buildReport(data);
 
-	var socket = net.createConnection(port, href, function(error) {
+	var socket = net.createConnection(GRAPHITE_PORT, GRAPHITE_URL, function(error) {
 		if (error) {
 			exit(error);
 		}
@@ -47,7 +47,7 @@ LogTests.prototype.buildReport = function(data) {
 	var metric = this.reportMetric(meta);
 	var testReport = data[this.options.average].firstView;
 
-	return properties.map(function(property) {
+	return COLLECT_PROPERTIES.map(function(property) {
 		return metric + '.' + property + ' ' + testReport[property];
 	});
 };

@@ -1,10 +1,10 @@
 var async = require('async');
 var WebPageTest = require('webpagetest');
 
-const privateServer = /internal/;
+const PUBLIC_SERVER = /webpagetest\.org/;
 
 function RunTests(options, key) {
-	this.key = privateServer.test(options.server) ? null : key;
+	this.key = options.server.match(PUBLIC_SERVER) ? key : null;
 	this.options = options;
 }
 

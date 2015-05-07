@@ -8,15 +8,15 @@ node index.js -u <url> -p <pageType>
 
 ###Options
 
-CLI Option | Description                        | Default
------------|------------------------------------|--------
-`-r`       | Number of runs                     | `1`
-`-w`       | Wait time (in s) between polls     | `5`
-`-t`       | Timeout (in s)                     | `180`
-`-s`       | Testing server URL                 | `http://www.webpagetest.org`
-`-l`       | Test location and browser          | `Dulles:Chrome`
-`-v`       | Verbose logging                    | `true`
-`-a`       | Average to use (average or median) | `median`
+Option  | Description                        | Default
+--------|------------------------------------|--------
+`-r`    | Number of runs                     | `1`
+`-w`    | Wait time (in s) between polls     | `5`
+`-t`    | Timeout (in s)                     | `180`
+`-s`    | Testing server URL                 | `www.webpagetest.org`
+`-l`    | Test location and browser          | `Dulles:Chrome`
+`-v`    | Verbose logging                    | `true`
+`-a`    | Average to use (average or median) | `median`
 
 ##Setup
 

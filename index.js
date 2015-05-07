@@ -10,7 +10,7 @@ var wptOptions = {
 	runs: argv.r || 1,
 	wait: (argv.w || 5) * 1000,
 	timeout: argv.t || 180,
-	server: argv.s || 'http://www.webpagetest.org',
+	server: argv.s || 'www.webpagetest.org',
 	location: argv.l || 'Dulles:Chrome',
 	verbose: argv.v || true
 };
@@ -30,7 +30,7 @@ var suite = new RunTests(wptOptions, accessTokens.wpt);
 
 suite.run(function(error, data) {
 	if (error) {
-		log.failed(error);
+		log.failure(error);
 	} else {
 		log.fulfilled(data);
 	}
