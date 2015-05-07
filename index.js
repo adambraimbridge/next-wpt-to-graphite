@@ -16,7 +16,8 @@ var wptOptions = {
 };
 
 var logOptions = {
-	pageType: argv.p
+	pageType: argv.p,
+	average: argv.a || 'median'
 };
 
 var accessTokens = {

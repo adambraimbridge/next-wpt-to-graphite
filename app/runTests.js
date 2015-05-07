@@ -1,10 +1,10 @@
-'use strict';
-
 var async = require('async');
 var WebPageTest = require('webpagetest');
 
+const privateServer = /internal/;
+
 function RunTests(options, key) {
-	this.key = /internal/.test(options.server) ? null : key;
+	this.key = privateServer.test(options.server) ? null : key;
 	this.options = options;
 }
 
@@ -26,13 +26,11 @@ RunTests.prototype.start = function(callback) {
 	this.wpt.runTest(this.options.url, this.options, function(error, response) {
 		callback(error, response.data.testId);
 	});
-
 };
 
 RunTests.prototype.poll = function(testId, callback) {
 	this.wpt.getTestStatus(testId, this.options, function(error, response) {
 		var statusCode = !error && response.data.statusCode;
-		var timeTaken = Date.now() - this.runStartTime.getTime();
 
 		if (error || statusCode >= 400) {
 			return callback(error || new Error(response.data.statusText));
@@ -42,7 +40,7 @@ RunTests.prototype.poll = function(testId, callback) {
 			return callback(null, testId);
 		}
 
-		if (timeTaken >= this.options.timeout) {
+		if (this.pollHasTimedOut()) {
 			return this.cancel(testId, function() {
 				callback(new Error('Operation timed out.'));
 			});
@@ -65,6 +63,10 @@ RunTests.prototype.end = function(testId, callback) {
 
 RunTests.prototype.cancel = function(testId, callback) {
 	this.wpt.cancelTest(testId, this.options, callback);
+};
+
+RunTests.prototype.pollHasTimedOut = function() {
+	return Date.now() - this.runStartTime.getTime() >= this.options.timeout;
 };
 
 RunTests.prototype.log = function(message) {
