@@ -8,7 +8,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var wptOptions = {
 	url: argv.u,
 	runs: argv.r || 1,
-	wait: argv.w || 1000 * 5,
+	wait: (argv.w || 5) * 1000,
 	timeout: argv.t || 180,
 	server: argv.s || 'http://www.webpagetest.org',
 	location: argv.l || 'Dulles:Chrome',
