@@ -26,6 +26,12 @@ RunTests.prototype.start = function(callback) {
 	this.log('Test started at ' + this.runStartTime.toTimeString());
 
 	this.wpt.runTest(this.options.url, this.options, function(error, response) {
+		var statusCode = !error && response.statusCode;
+
+		if (error || statusCode >= 400) {
+			return callback(error || new Error(response.statusText));
+		}
+
 		callback(error, response.data.testId);
 	});
 };
