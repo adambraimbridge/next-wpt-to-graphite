@@ -1,10 +1,12 @@
+'use strict';
+
 var url = require('url');
 var net = require('net');
 
-const GRAPHITE_PORT = 2003;
-const GRAPHITE_URL = 'carbon.hostedgraphite.com';
-const GRAPHITE_NAMESPACE = 'wpt';
-const COLLECT_PROPERTIES = [
+var GRAPHITE_PORT = 2003;
+var GRAPHITE_URL = 'carbon.hostedgraphite.com';
+var GRAPHITE_NAMESPACE = 'wpt';
+var COLLECT_PROPERTIES = [
 	'TTFB',
 	'render',
 	'domContentLoadedEventStart',
@@ -27,7 +29,7 @@ LogTests.prototype.fulfilled = function(data) {
 
 	var socket = net.createConnection(GRAPHITE_PORT, GRAPHITE_URL, function(error) {
 		if (error) {
-			exit(error);
+			throw error;
 		}
 
 		report.forEach(function(line) {
@@ -73,7 +75,7 @@ LogTests.prototype.reportMetaData = function(data) {
 		hostname: url.parse(data.url).hostname,
 		// E.G. Europe Dublin AWS - Prod - <b>Chrome</b> - <b>Cable</b>
 		location: data.from.match(/^([\w\s,]+)/)[1],
-		browser: data.from.match(/\<b\>([\w\s]+)\<\/b\>/)[1]
+		browser: data.from.match(/<b\>([\w\s]+)<\/b\>/)[1]
 	};
 };
 

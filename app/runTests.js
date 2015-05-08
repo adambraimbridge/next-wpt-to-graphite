@@ -1,7 +1,9 @@
+'use strict';
+
 var async = require('async');
 var WebPageTest = require('webpagetest');
 
-const PUBLIC_SERVER = /webpagetest\.org/;
+var PUBLIC_SERVER = /webpagetest\.org/;
 
 function RunTests(options, key) {
 	this.key = options.server.match(PUBLIC_SERVER) ? key : null;
@@ -11,7 +13,7 @@ function RunTests(options, key) {
 RunTests.prototype.run = function(callback) {
 	this.wpt = new WebPageTest(this.options.server, this.key);
 
-	this.runStartTime = new Date;
+	this.runStartTime = new Date();
 
 	async.waterfall([
 		this.start.bind(this),
@@ -36,7 +38,7 @@ RunTests.prototype.poll = function(testId, callback) {
 			return callback(error || new Error(response.data.statusText));
 		}
 
-		if (statusCode == 200) {
+		if (statusCode === 200) {
 			return callback(null, testId);
 		}
 

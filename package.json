@@ -16,6 +16,6 @@
     "url": "http://git@git.svc.ft.com:8080/~harry.spriggs/wpt-to-graphite-on-jenkins.git"
   },
   "devDependencies": {
-    "next-build-tools": "^2.2.0"
+    "next-build-tools": "^2.3.2"
   }
 }
