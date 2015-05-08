@@ -2,13 +2,14 @@
   "name": "wpt_to_graphite",
   "version": "0.5.0",
   "description": "Jenkins jobs to POST WebPageTest results",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "webpagetest": "0.3.x",
-    "minimist": "^1.1.0"
+    "async": "^0.9.0",
+    "minimist": "^1.1.0",
+    "webpagetest": "0.3.x"
   },
   "repository": {
     "type": "git",
