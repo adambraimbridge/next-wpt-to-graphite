@@ -3,7 +3,7 @@ var net = require('net');
 
 const GRAPHITE_PORT = 2003;
 const GRAPHITE_URL = 'carbon.hostedgraphite.com';
-
+const GRAPHITE_NAMESPACE = 'wpt';
 const COLLECT_PROPERTIES = [
 	'TTFB',
 	'render',
@@ -59,7 +59,7 @@ LogTests.prototype.reportMetric = function(meta) {
 
 	return [
 		this.key,
-		'webpagetest',
+		GRAPHITE_NAMESPACE,
 		format(meta.hostname),
 		format(meta.location),
 		format(meta.browser),
