@@ -14,9 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://git@git.svc.ft.com:8080/~harry.spriggs/wpt-to-graphite-on-jenkins.git"
+    "url": "https://github.com/Financial-Times/next-wpt-to-graphite.git"
   },
   "devDependencies": {
     "next-build-tools": "^2.3.2"
+  },
+  "engines": {
+    "node": ">= 0.12.2",
+    "iojs": ">= 2.0.1"
   }
 }
