@@ -65,8 +65,9 @@ RunTests.prototype.end = function(testId, callback) {
 	this.log('Test completed at ' + new Date().toTimeString());
 
 	this.wpt.getTestResults(testId, this.options, function(error, response) {
+		response.data && (response.data.pageType = this.options.pageType);
 		callback(error, response.data);
-	});
+	}.bind(this));
 };
 
 RunTests.prototype.cancel = function(testId, callback) {

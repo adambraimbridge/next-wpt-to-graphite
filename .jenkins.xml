@@ -37,41 +37,7 @@
 make test</command>
     </hudson.tasks.Shell>
     <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:Chrome" -u http://next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de -p article -s webpagetest.internal.ft.com -r 3
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:Chrome" -u http://next.ft.com -p homepage -s webpagetest.internal.ft.com -r 3
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:Firefox" -u http://next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de -p article -s webpagetest.internal.ft.com -r 3
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:Firefox" -u http://next.ft.com -p homepage -s webpagetest.internal.ft.com -r 3
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:IE 11" -u http://next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de -p article -s webpagetest.internal.ft.com -r 3
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:IE 11" -u http://next.ft.com -p homepage -s webpagetest.internal.ft.com -r 3
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:Chrome" -u http://www.wsj.com -p homepage -s webpagetest.internal.ft.com -r 3
-</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "US_Ashburn-AWS-Prod_wptdriver:Chrome" -u http://www.wsj.com -p homepage -s webpagetest.internal.ft.com -r 3</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:Chrome" -u http://www.ft.com -p homepage -s webpagetest.internal.ft.com -r 3</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>node index.js -l "Europe_Dublin-AWS-Prod_wptdriver:Chrome" -u http://www.ft.com/cms/s/2/0f7464b4-3f4d-11e4-984b-00144feabdc0.html -p article -s webpagetest.internal.ft.com -r 3</command>
+      <command>node index.js -b tests.json -s webpagetest.internal.ft.com -r 3 -t 360</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>

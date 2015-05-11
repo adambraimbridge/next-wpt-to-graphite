@@ -1,0 +1,49 @@
+{
+	"tests": [
+		{
+			"pageType": "homepage",
+			"url": "http://next.ft.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:IE 11"
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://next.ft.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://next.ft.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Firefox"
+		},
+		{
+			"pageType": "article",
+			"url": "http://next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:IE 11"
+		},
+		{
+			"pageType": "article",
+			"url": "http://next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "article",
+			"url": "http://next.ft.com/380e7966-b07f-11e4-9b8e-00144feab7de",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Firefox"
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://www.wsj.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://www.nytimes.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://uk.businessinsider.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		}
+	]
+}

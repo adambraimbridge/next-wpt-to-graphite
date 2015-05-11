@@ -24,24 +24,24 @@ function LogTests(options, key) {
 	this.key = key;
 }
 
-LogTests.prototype.fulfilled = function(data) {
-	var report = this.buildReport(data);
+LogTests.prototype.saveReports = function(data) {
+	var reports = data.map(this.buildReport.bind(this));
+
+	var metrics = reports.reduce(function(a, b) {
+		return a.concat(b);
+	}, []);
 
 	var socket = net.createConnection(GRAPHITE_PORT, GRAPHITE_URL, function(error) {
 		if (error) {
 			throw error;
 		}
 
-		report.forEach(function(line) {
+		metrics.forEach(function(line) {
 			socket.write(line + '\n');
 		});
 
 		socket.end();
 	});
-};
-
-LogTests.prototype.failed = function(error) {
-	console.error("Error", error);
 };
 
 LogTests.prototype.buildReport = function(data) {
@@ -50,7 +50,7 @@ LogTests.prototype.buildReport = function(data) {
 	var testReport = data[this.options.average].firstView;
 
 	return COLLECT_PROPERTIES.map(function(property) {
-		return metric + '.' + property + ' ' + testReport[property];
+		return metric + '.' + data.pageType + '.' + property + ' ' + testReport[property];
 	});
 };
 
@@ -64,8 +64,7 @@ LogTests.prototype.reportMetric = function(meta) {
 		GRAPHITE_NAMESPACE,
 		format(meta.hostname),
 		format(meta.location),
-		format(meta.browser),
-		this.options.pageType
+		format(meta.browser)
 	].join('.');
 };
 
