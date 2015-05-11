@@ -1,5 +1,7 @@
 'use strict';
 
+require('es6-promise').polyfill();
+
 var minimist = require('minimist');
 var denodeify = require('denodeify');
 
