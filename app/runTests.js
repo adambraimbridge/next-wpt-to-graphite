@@ -26,6 +26,12 @@ RunTests.prototype.start = function(callback) {
 	this.log('Test started at ' + this.runStartTime.toTimeString());
 
 	this.wpt.runTest(this.options.url, this.options, function(error, response) {
+		var statusCode = !error && response.statusCode;
+
+		if (error || statusCode >= 400) {
+			return callback(error || new Error(response.statusText));
+		}
+
 		callback(error, response.data.testId);
 	});
 };
@@ -59,8 +65,9 @@ RunTests.prototype.end = function(testId, callback) {
 	this.log('Test completed at ' + new Date().toTimeString());
 
 	this.wpt.getTestResults(testId, this.options, function(error, response) {
+		response.data && (response.data.pageType = this.options.pageType);
 		callback(error, response.data);
-	});
+	}.bind(this));
 };
 
 RunTests.prototype.cancel = function(testId, callback) {
