@@ -31,8 +31,18 @@
 			"location": "Europe_Dublin-AWS-Prod_wptdriver:Firefox"
 		},
 		{
+			"pageType": "stream",
+			"url": "http://next.ft.com/stream/regionsId/TnN0ZWluX0dMX0NO-R0w=",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},		
+		{
 			"pageType": "homepage",
 			"url": "http://www.wsj.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},		
+		{
+			"pageType": "article",
+			"url": "http://www.wsj.com/articles/nepal-hit-by-another-major-earthquake-1431416952",
 			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
 		},
 		{
@@ -41,8 +51,28 @@
 			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
 		},
 		{
+			"pageType": "article",
+			"url": "http://www.nytimes.com/2015/05/13/business/senate-vote-obama-fast-track-trade-deal.html",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
 			"pageType": "homepage",
 			"url": "http://uk.businessinsider.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "article",
+			"url": "http://uk.businessinsider.com/report-the-imf-wont-join-in-a-third-bailout-for-greece-2015-5",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://www.bloomberg.com/europe",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "article",
+			"url": "http://www.bloomberg.com/news/articles/2015-05-11/euro-holds-drop-amid-greece-concern-asian-stock-futures-mixed",
 			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
 		}
 	]
