@@ -34,7 +34,27 @@
 			"pageType": "stream",
 			"url": "http://next.ft.com/stream/regionsId/TnN0ZWluX0dMX0NO-R0w=",
 			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
-		},		
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://www.ft.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:IE 11"
+		},
+		{
+			"pageType": "homepage",
+			"url": "http://www.ft.com",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
+		{
+			"pageType": "article",
+			"url": "http://www.ft.com/cms/s/2/0e589906-f316-11e4-a979-00144feab7de.html",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:IE 11"
+		},
+		{
+			"pageType": "article",
+			"url": "http://www.ft.com/cms/s/2/0e589906-f316-11e4-a979-00144feab7de.html",
+			"location": "Europe_Dublin-AWS-Prod_wptdriver:Chrome"
+		},
 		{
 			"pageType": "homepage",
 			"url": "http://www.wsj.com",
