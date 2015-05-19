@@ -2,8 +2,16 @@ A simple program to check in-browser performance, using WebPageTest, against the
 
 ##Usage
 
+For a single page:
+
 ```
 node index.js -u <url> -p <pageType>
+```
+
+Or for a group of pages listed in a JSON file:
+
+```
+node index.js -b <file>
 ```
 
 ###Options
